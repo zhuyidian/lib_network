@@ -1,0 +1,16 @@
+# lib_network
+/lib_network/.gradle/
+/lib_network/.idea/
+/lib_network/.svn/
+/lib_network/java_pid5600.hprof   
+/lib_network/local.properties
+/lib_network/*.iml
+
+#sample
+/lib_network/sample/build/
+/lib_network/sample/*.iml
+
+#network
+/lib_network/network/build/
+/lib_network/network/*.iml
+
