@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleTickView">
+        <attr name="circleRadius" format="integer" />
+        <attr name="roundBackgroundColor" format="color" />
+        <attr name="touchPrecision" format="integer" />
+        <attr name="defaultTickColorBig" format="color" />
+        <attr name="defaultTickColorSmall" format="color" />
+        <attr name="defaultTriangleColor" format="color" />
+        <attr name="tickStrokeSizeSmall" format="dimension" />
+        <attr name="tickStrokeSizeBig" format="dimension" />
+        <attr name="lineWidthSmall" format="float" />
+        <attr name="lineWidthBig" format="float" />
+        <attr name="tickMaxCount" format="integer" />
+        <attr name="centerTextColor" format="color" />
+        <attr name="centerTextSize" format="dimension" />
+        <attr name="value" format="integer" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,30 @@
+ext {
+    myMaven = [
+            url : "https://jitpack.io",
+            git : 'com.github.teamZW.customWidget'
+    ]
+
+    android = [
+            compileSdkVersion : 28,
+            buildToolsVersion : '28.0.3',
+            applicationId     : 'com.example.sample',
+            minSdkVersion     : 19,
+            targetSdkVersion  : 28,
+            versionCode       : 3,
+            versionName       : '1.0.0',
+            multiDexEnabled   : true,
+            minifyEnabled     : false
+    ]
+
+    depsVersion = [
+            appcompatRC : '28.0.0-rc01',
+            appcompat   : '+',
+            junit       : '4.12'
+    ]
+
+    depsLibs = [
+            appcompatRC   : "com.android.support:appcompat-v7:${depsVersion.appcompatRC}",
+            appcompat     : "com.android.support:appcompat-v7:${depsVersion.appcompat}",
+            junit         : "junit:junit:${depsVersion.junit}"
+    ]
+}
