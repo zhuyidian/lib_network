@@ -7,7 +7,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        //第三步：迁移androidX gradle版本要升级成3.4.1
+        //第四步：迁移androidX 菜单栏-->Refactor-->Migrate to AndroidX-->migrate
+        //第五步：迁移androidX 有的包import可能没有自动迁移过来，需要手动迁移
+        classpath 'com.android.tools.build:gradle:3.4.1'
 //        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
