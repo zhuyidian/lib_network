@@ -1,6 +1,8 @@
 package com.dunn.net.request;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import okhttp3.FormBody;
@@ -11,10 +13,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
- * @author vision
- * @function build the request
+ * @author dunn
+ * @function 对外提供get/post/文件上传请求
  */
 public class CommonRequest {
+    enum HttpMethodType {
+        GET,
+        POST,
+    }
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType TEXT_FILE = MediaType.parse("text/plain; charset=utf-8");
+
     /**
      * create the key-value Request
      *
@@ -36,6 +45,7 @@ public class CommonRequest {
      */
     public static Request createPostRequest(String url, RequestParams params, RequestParams headers) {
         FormBody.Builder mFormBodyBuild = new FormBody.Builder();
+        //参数遍历
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
                 mFormBodyBuild.add(entry.getKey(), entry.getValue());
@@ -50,9 +60,9 @@ public class CommonRequest {
         }
         FormBody mFormBody = mFormBodyBuild.build();
         Headers mHeader = mHeaderBuild.build();
-        Request request = new Request.Builder().url(url).
-                post(mFormBody).
-                headers(mHeader)
+        Request request = new Request.Builder().url(url)
+                .post(mFormBody)
+                .headers(mHeader)
                 .build();
         return request;
     }
@@ -92,11 +102,60 @@ public class CommonRequest {
             }
         }
         Headers mHeader = mHeaderBuild.build();
-        return new Request.Builder().
-                url(urlBuilder.substring(0, urlBuilder.length() - 1))
+        return new Request.Builder()
+                .url(urlBuilder.substring(0, urlBuilder.length() - 1))
                 .get()
                 .headers(mHeader)
                 .build();
+    }
+
+    /**
+     * 另一种创建request，不带请求头
+     * @param url
+     * @param methodType
+     * @param json
+     * @return
+     */
+    public static Request createRequestNoHeader(String url, HttpMethodType methodType, String json) {
+        Request.Builder build = new Request.Builder().url(url);
+        build.addHeader("api-version", "2");
+        if (methodType == HttpMethodType.GET) {
+        } else if (methodType == HttpMethodType.POST) {
+            RequestBody requestBody = RequestBody.create(JSON, json);
+            build.post(requestBody);
+        }
+        return build.build();
+    }
+
+    /**
+     * 另一种创建request带请求头
+     * @param url
+     * @param methodType
+     * @param json
+     * @param headerMap
+     * @return
+     */
+    public static  Request createRequestWithHeader(String url, HttpMethodType methodType, String json, HashMap<String, String> headerMap) {
+        if (headerMap==null){
+            headerMap=new HashMap<>();
+        }
+        Request.Builder build = new Request.Builder().url(url);
+        build.addHeader("client_version", "版本");
+        build.addHeader("Accept-Language", "语言");
+        //添加请求头
+        if (headerMap != null) {
+            Iterator iter = headerMap.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                build.addHeader((String) entry.getKey(), (String) entry.getValue());
+            }
+        }
+        if (methodType == HttpMethodType.GET) {
+        } else if (methodType == HttpMethodType.POST) {
+            RequestBody requestBody = RequestBody.create(JSON, json);
+            build.post(requestBody);
+        }
+        return build.build();
     }
 
     /**

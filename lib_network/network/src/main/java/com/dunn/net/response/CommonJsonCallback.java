@@ -88,7 +88,7 @@ public class CommonJsonCallback implements Callback {
             if (mClass == null) {
                 mListener.onSuccess(result);
             } else {
-                Object obj = new Gson().fromJson(responseObj.toString(), mClass);
+                Object obj = new Gson().fromJson(responseObj.toString(), mClass);  //转化成实体对象
                 if (obj != null) {
                     mListener.onSuccess(obj);
                 } else {

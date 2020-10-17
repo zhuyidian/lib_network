@@ -122,6 +122,7 @@ public class CommonFileCallback implements Callback {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                file = null;
             }
         }
         return file;
