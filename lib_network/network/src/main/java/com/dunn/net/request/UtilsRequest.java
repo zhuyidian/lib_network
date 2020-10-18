@@ -1,10 +1,13 @@
 package com.dunn.net.request;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
@@ -12,9 +15,9 @@ import okhttp3.RequestBody;
 
 /**
  * @author dunn
- * @function 对外提供get/post/文件上传请求
+ * @function 参数自动封装
  */
-public class CommonRequest {
+public class UtilsRequest {
     /**
      * create the key-value Request
      *
@@ -36,6 +39,9 @@ public class CommonRequest {
      */
     public static Request createPostRequest(String url, RequestParams params, RequestParams headers) {
         FormBody.Builder mFormBodyBuild = new FormBody.Builder();
+        //body增加公共信息
+        mFormBodyBuild.add("username", "nate")
+                .add("userage", "99");
         //参数遍历
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
@@ -79,12 +85,15 @@ public class CommonRequest {
      * @return
      */
     public static Request createGetRequest(String url, RequestParams params, RequestParams headers) {
-        StringBuilder urlBuilder = new StringBuilder(url).append("?");
+        //使用HttpUrl获得get请求url+参数
+        HttpUrl.Builder httpUrlBuilder = HttpUrl.parse(url).newBuilder();
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
-                urlBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+                httpUrlBuilder.addQueryParameter(entry.getKey(),entry.getValue());
             }
         }
+        //urlParam=https://api.heweather.com/x3/weather?city=beijing&key=d17ce22ec5404ed883e1cfcaca0ecaa7
+        String urlParam = httpUrlBuilder.build().toString();
         //添加请求头
         Headers.Builder mHeaderBuild = new Headers.Builder();
         if (headers != null) {
@@ -94,34 +103,22 @@ public class CommonRequest {
         }
         Headers mHeader = mHeaderBuild.build();
         return new Request.Builder()
-                .url(urlBuilder.substring(0, urlBuilder.length() - 1))
+                .url(urlParam)
                 .get()
                 .headers(mHeader)
                 .build();
     }
 
-    /**
-     * 文件上传/下载请求
-     *
-     * @return
-     */
-    private static final MediaType FILE_TYPE = MediaType.parse("application/octet-stream");
+    public static Request createUploadRequestTest() {
+        RequestBody imageBody = RequestBody.create(MediaType.parse("image/jpeg"), new File("/Users/nate/girl.jpg"));
+        MultipartBody body = new MultipartBody.Builder().
+                setType(MultipartBody.FORM).
+                addFormDataPart("name", "nate").
+                addFormDataPart("filename", "girl.jpg", imageBody).build();
 
-    public static Request createMultiPostRequest(String url, RequestParams params) {
-        MultipartBody.Builder requestBody = new MultipartBody.Builder();
-        requestBody.setType(MultipartBody.FORM);
-        if (params != null) {
-            for (Map.Entry<String, Object> entry : params.fileParams.entrySet()) {
-                if (entry.getValue() instanceof File) {
-                    requestBody.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""),
-                            RequestBody.create(FILE_TYPE, (File) entry.getValue()));
-                } else if (entry.getValue() instanceof String) {
+        Request request = new Request.Builder().
+                url("http://192.168.1.6:8080/web/UploadServlet").post(body).build();
 
-                    requestBody.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""),
-                            RequestBody.create(null, (String) entry.getValue()));
-                }
-            }
-        }
-        return new Request.Builder().url(url).post(requestBody.build()).build();
+        return request;
     }
 }
