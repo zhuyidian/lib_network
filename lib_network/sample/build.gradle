@@ -27,6 +27,6 @@ dependencies {
     testImplementation "junit:junit:4.12"
 
     //network
-    implementation project(':network')
+    implementation project(':lib_http')
     //implementation 'com.github.teamZW.customWidget:librarycircletick:1.0.5'
 }

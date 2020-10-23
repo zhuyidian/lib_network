@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray_c">#cccccc</color>
+    <color name="orange_f6">#f6d282</color>
+    <color name="purple_55">#554b70</color>
+    <color name="purple_82">#827a99</color>
+    <color name="purple_83">#ffffff</color>
+    <color name="transparent">#00000000</color>
+    <declare-styleable name="CircleTickView">
+        <attr format="integer" name="circleRadius"/>
+        <attr format="color" name="roundBackgroundColor"/>
+        <attr format="integer" name="touchPrecision"/>
+        <attr format="color" name="defaultTickColorBig"/>
+        <attr format="color" name="defaultTickColorSmall"/>
+        <attr format="color" name="defaultTriangleColor"/>
+        <attr format="dimension" name="tickStrokeSizeSmall"/>
+        <attr format="dimension" name="tickStrokeSizeBig"/>
+        <attr format="float" name="lineWidthSmall"/>
+        <attr format="float" name="lineWidthBig"/>
+        <attr format="integer" name="tickMaxCount"/>
+        <attr format="color" name="centerTextColor"/>
+        <attr format="dimension" name="centerTextSize"/>
+        <attr format="integer" name="value"/>
+    </declare-styleable>
+</resources>

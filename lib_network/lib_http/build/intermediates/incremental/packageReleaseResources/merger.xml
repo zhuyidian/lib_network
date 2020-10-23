@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/src/main/res"/><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/build/generated/res/rs/release"/><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/build/generated/res/resValues/release"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main" generated-set="main$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/src/main/res"><file path="/home/dunn/project/github/lib_network/lib_network/lib_http/src/main/res/values/attrs.xml" qualifiers=""><declare-styleable name="CircleTickView">
+        <attr format="integer" name="circleRadius"/>
+        <attr format="color" name="roundBackgroundColor"/>
+        <attr format="integer" name="touchPrecision"/>
+        <attr format="color" name="defaultTickColorBig"/>
+        <attr format="color" name="defaultTickColorSmall"/>
+        <attr format="color" name="defaultTriangleColor"/>
+        <attr format="dimension" name="tickStrokeSizeSmall"/>
+        <attr format="dimension" name="tickStrokeSizeBig"/>
+        <attr format="float" name="lineWidthSmall"/>
+        <attr format="float" name="lineWidthBig"/>
+        <attr format="integer" name="tickMaxCount"/>
+        <attr format="color" name="centerTextColor"/>
+        <attr format="dimension" name="centerTextSize"/>
+        <attr format="integer" name="value"/>
+    </declare-styleable></file><file path="/home/dunn/project/github/lib_network/lib_network/lib_http/src/main/res/values/colors.xml" qualifiers=""><color name="purple_55">#554b70</color><color name="orange_f6">#f6d282</color><color name="purple_83">#ffffff</color><color name="purple_82">#827a99</color><color name="gray_c">#cccccc</color><color name="transparent">#00000000</color></file><file path="/home/dunn/project/github/lib_network/lib_network/lib_http/src/main/res/values/strings.xml" qualifiers=""/></source><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/build/generated/res/rs/release"/><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/build/generated/res/resValues/release"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="release$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/src/release/res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="release" generated-set="release$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/home/dunn/project/github/lib_network/lib_network/lib_http/src/release/res"/></dataSet><mergedItems><configuration qualifiers=""><declare-styleable name="CircleTickView">
+        <attr format="integer" name="circleRadius"/>
+        <attr format="color" name="roundBackgroundColor"/>
+        <attr format="integer" name="touchPrecision"/>
+        <attr format="color" name="defaultTickColorBig"/>
+        <attr format="color" name="defaultTickColorSmall"/>
+        <attr format="color" name="defaultTriangleColor"/>
+        <attr format="dimension" name="tickStrokeSizeSmall"/>
+        <attr format="dimension" name="tickStrokeSizeBig"/>
+        <attr format="float" name="lineWidthSmall"/>
+        <attr format="float" name="lineWidthBig"/>
+        <attr format="integer" name="tickMaxCount"/>
+        <attr format="color" name="centerTextColor"/>
+        <attr format="dimension" name="centerTextSize"/>
+        <attr format="integer" name="value"/>
+    </declare-styleable></configuration></mergedItems></merger>

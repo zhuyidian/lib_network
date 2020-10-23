@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/dunn/project/github/lib_network/lib_network/lib_http/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/home/dunn/.gradle/caches/transforms-2/files-2.1/e0c8983bf07de141b48d53b47b2993ba/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/dunn/project/github/lib_network/lib_network/lib_http/build/intermediates/res/merged/release/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/home/dunn/.gradle/caches/transforms-2/files-2.1/e0c8983bf07de141b48d53b47b2993ba/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}
