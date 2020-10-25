@@ -15,6 +15,17 @@ import okhttp3.Request;
  */
 public class CommonRequest {
     /**
+     *
+     * @param url
+     * @return
+     */
+    public static Request createCommonRequest(String url) {
+        return new Request.Builder()
+                .url(url)
+                .build();
+    }
+
+    /**
      * create the key-value Request
      *
      * @param url

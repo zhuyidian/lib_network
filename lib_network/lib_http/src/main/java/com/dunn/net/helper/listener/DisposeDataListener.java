@@ -8,7 +8,7 @@ public interface DisposeDataListener {
     /**
      * 请求成功回调事件处理
      */
-    void onSuccess(Object responseObj);
+    void onSuccess(int code,Object responseObj);
 
     /**
      * 请求失败回调事件处理

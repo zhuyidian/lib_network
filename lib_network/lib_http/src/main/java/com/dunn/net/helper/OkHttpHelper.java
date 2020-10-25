@@ -1,7 +1,11 @@
 package com.dunn.net.helper;
 
+import android.os.Environment;
+
 import com.dunn.net.cookie.SimpleCookieJar;
 import com.dunn.net.helper.listener.RequestUploadProgressListener;
+import com.dunn.net.interceptor.CacheRequestInterceptor;
+import com.dunn.net.interceptor.CacheResponseInterceptor;
 import com.dunn.net.request.FileRequest;
 import com.dunn.net.utils.HttpsUtils;
 import com.dunn.net.helper.listener.DisposeDataListener;
@@ -9,6 +13,7 @@ import com.dunn.net.request.CommonRequest;
 import com.dunn.net.request.JsonRequest;
 import com.dunn.net.response.JsonCallback;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
@@ -21,6 +26,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Interceptor;
@@ -37,7 +43,7 @@ public class OkHttpHelper {
     private static OkHttpClient mOkHttpClient;
 
     /**
-     * 完成对OkHttpClient的初始化
+     * 默认完成对OkHttpClient的初始化
      */
     static {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
@@ -76,6 +82,7 @@ public class OkHttpHelper {
         okHttpClientBuilder.sslSocketFactory(HttpsUtils.initSSLSocketFactory(),
                 HttpsUtils.initTrustManager());
         mOkHttpClient = okHttpClientBuilder.build();
+//        mOkHttpClient = getCacheOkHttpClient();
     }
 
     /**
@@ -125,11 +132,64 @@ public class OkHttpHelper {
         }
     }
 
+    /**
+     * 自定义缓存（要求：有网 30s 内请求读缓存，无网直接读缓存）
+     * @return
+     */
+    private static OkHttpClient getCacheOkHttpClient(){
+        //接收到response查看
+        //// 都是有 第一把，第二把没有网络的了只有缓存的 (30s 以内)，过了 30s 之后又会有网络的了（会再请求更新）
+        //                Log.e("TAG", response.cacheResponse()+" ; "+response.networkResponse());
+
+        // 自定义缓存（要求：有网 30s 内请求读缓存，无网直接读缓存）
+        // OkHttp 自带的扩展有坑，我们之前自己写过这个缓存管理，与 OkHttp 结合就可以了
+
+        // 思路？拦截器?分为两种
+        File file = new File(Environment.getExternalStorageDirectory(),"cache");
+        Cache cache = new Cache(file,100*1024*1024);
+        OkHttpClient mHttpClient = new OkHttpClient.Builder()
+                .cache(cache)
+                // 加载最前 过期时间缓存多少秒
+                .addInterceptor(new CacheRequestInterceptor())
+                // 加载最后,数据缓存 过期时间 30s
+                .addNetworkInterceptor(new CacheResponseInterceptor())
+                .build();
+
+        return mHttpClient;
+    }
+
     public static OkHttpClient getOkHttpClient() {
         return mOkHttpClient;
     }
 
     /**
+     * 发送基本请求
+     * @param url
+     * @param listener
+     */
+    public static void commonRequest(String url,DisposeDataListener listener) {
+        Request request = null;
+        Callback callback = new JsonCallback(listener,null);
+        request = CommonRequest.createCommonRequest(url);
+        request(request,callback);
+    }
+
+    /**
+     * 发送get请求
+     * @param url
+     * @param params
+     * @param listener
+     */
+    public static void getRequest(String url,
+                                  RequestParams params,
+                                  DisposeDataListener listener) {
+        Request request = null;
+        Callback callback = new JsonCallback(listener,null);
+        request = CommonRequest.createGetRequest(url, params);
+        request(request,callback);
+    }
+
+    /**
      * 发送get请求
      * @param url
      * @param headers
@@ -144,8 +204,10 @@ public class OkHttpHelper {
         Callback callback = new JsonCallback(listener,null);
         if(headers!=null && headers.hasParams()){
             request = CommonRequest.createGetRequest(url, params, headers);
+//            request = CommonRequest.createGetRequest_HttpUrl(url, params, headers);
         }else{
             request = CommonRequest.createGetRequest(url, params);
+//            request = CommonRequest.createGetRequest_HttpUrl(url, params, headers);
         }
         request(request,callback);
     }
@@ -176,11 +238,26 @@ public class OkHttpHelper {
     /**
      * 发送get请求
      * @param url
+     * @param json  json格式参数
+     * @param listener
+     */
+    public static void getRequestJson(String url,
+                                      String json,
+                                      DisposeDataListener listener) {
+        Request request = null;
+        Callback callback = new JsonCallback(listener,null);
+        request = JsonRequest.createRequest(url, JsonRequest.HttpMethodType.GET, json);
+        request(request,callback);
+    }
+
+    /**
+     * 发送get请求
+     * @param url
      * @param headers
      * @param json  json格式参数
      * @param listener
      */
-    public static void getRequest(String url,
+    public static void getRequestJson(String url,
                                   HashMap<String, String> headers,
                                   String json,
                                   DisposeDataListener listener) {
@@ -202,7 +279,7 @@ public class OkHttpHelper {
      * @param listener
      * @param mClass
      */
-    public static void getRequest(String url,
+    public static void getRequestJson(String url,
                                   HashMap<String, String> headers,
                                   String json,
                                   DisposeDataListener listener,
@@ -214,6 +291,21 @@ public class OkHttpHelper {
         }else{
             request = JsonRequest.createRequest(url, JsonRequest.HttpMethodType.GET, json);
         }
+        request(request,callback);
+    }
+
+    /**
+     * 发送post请求
+     * @param url
+     * @param params
+     * @param listener
+     */
+    public static void postRequest(String url,
+                                   RequestParams params,
+                                   DisposeDataListener listener) {
+        Request request = null;
+        Callback callback = new JsonCallback(listener,null);
+        request = CommonRequest.createPostRequest(url, params);
         request(request,callback);
     }
 
@@ -264,11 +356,26 @@ public class OkHttpHelper {
     /**
      * 发送post请求
      * @param url
+     * @param json  json格式参数
+     * @param listener
+     */
+    public static void postRequestJson(String url,
+                                       String json,
+                                       DisposeDataListener listener) {
+        Request request = null;
+        Callback callback = new JsonCallback(listener,null);
+        request = JsonRequest.createRequest(url, JsonRequest.HttpMethodType.POST, json);
+        request(request,callback);
+    }
+
+    /**
+     * 发送post请求
+     * @param url
      * @param headers
      * @param json  json格式参数
      * @param listener
      */
-    public static void postRequest(String url,
+    public static void postRequestJson(String url,
                                    HashMap<String, String> headers,
                                    String json,
                                    DisposeDataListener listener) {
@@ -290,7 +397,7 @@ public class OkHttpHelper {
      * @param listener
      * @param mClass
      */
-    public static void postRequest(String url,
+    public static void postRequestJson(String url,
                                    HashMap<String, String> headers,
                                    String json,
                                    DisposeDataListener listener,

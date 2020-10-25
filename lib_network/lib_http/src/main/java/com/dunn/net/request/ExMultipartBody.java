@@ -59,7 +59,7 @@ public class ExMultipartBody extends RequestBody {
                 if(mProgressListener!=null){
                     mProgressListener.onProgress(contentLength,mCurrentLength);
                 }
-                //Log.e("TAG",contentLength+" : "+mCurrentLength);
+
                 super.write(source, byteCount);
             }
         };

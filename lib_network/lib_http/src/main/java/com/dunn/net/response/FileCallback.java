@@ -56,12 +56,13 @@ public class FileCallback implements Callback {
 
     @Override
     public void onResponse(Call call, Response response) throws IOException {
+        final int code = response.code();
         final File file = handleResponse(response);
         mDeliveryHandler.post(new Runnable() {
             @Override
             public void run() {
                 if (file != null) {
-                    mListener.onSuccess(file);
+                    mListener.onSuccess(code,file);
                 } else {
                     mListener.onFailure(new OkHttpException(CodeHelper.IO_ERROR, CodeHelper.EMPTY_MSG));
                 }

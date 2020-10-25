@@ -7,7 +7,8 @@ public class CodeHelper {
     public static final int NETWORK_ERROR = -1; // the network relative error
     public static final int JSON_ERROR = -2; // the JSON relative error
     public static final int IO_ERROR = -3; // the JSON relative error
-    public static final int OTHER_ERROR = -4; // the unknow error
+    public static final int DATA_ERROR = -4; // data error
+    public static final int OTHER_ERROR = -5; // the unknow error
 
     /**
      * MSG

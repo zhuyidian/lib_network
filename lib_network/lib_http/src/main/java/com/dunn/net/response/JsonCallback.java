@@ -2,6 +2,7 @@ package com.dunn.net.response;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.dunn.net.helper.exception.OkHttpException;
 import com.dunn.net.helper.CodeHelper;
@@ -46,39 +47,59 @@ public class JsonCallback implements Callback {
 
     @Override
     public void onResponse(final Call call, final Response response) throws IOException {
+        final int code = response.code();
         final String result = response.body().string();
+        Log.e("lib_network", response.cacheResponse()+" ; "+response.networkResponse());
         mDeliveryHandler.post(new Runnable() {
             @Override
             public void run() {
-                handleResponse(result);
+                handleResponse(code,result);
             }
         });
     }
 
-    private void handleResponse(Object responseObj) {
-        if (responseObj == null || responseObj.toString().trim().equals("")) {
-            mListener.onFailure(new OkHttpException(CodeHelper.NETWORK_ERROR, CodeHelper.EMPTY_MSG));
+    private void handleResponse(int code,String responseObj) {
+        if (responseObj == null || responseObj.trim().equals("")) {
+            mListener.onFailure(new OkHttpException(CodeHelper.DATA_ERROR, CodeHelper.EMPTY_MSG));
             return;
         }
 
-        try {
-            /**
-             * 协议确定后看这里如何修改
-             */
-            JSONObject result = new JSONObject(responseObj.toString());
-            if (mClass == null) {
-                mListener.onSuccess(result);
-            } else {
-                Object obj = new Gson().fromJson(responseObj.toString(), mClass);  //转化成实体对象
+        //class
+        if (mClass != null) {
+            try {
+                JSONObject result = new JSONObject(responseObj);
+                Object obj = new Gson().fromJson(result.toString(), mClass);  //转化成实体对象
                 if (obj != null) {
-                    mListener.onSuccess(obj);
+                    mListener.onSuccess(code,obj);
                 } else {
                     mListener.onFailure(new OkHttpException(CodeHelper.JSON_ERROR, CodeHelper.EMPTY_MSG));
                 }
+            }catch (Exception e){
+                e.printStackTrace();
+                mListener.onFailure(new OkHttpException(CodeHelper.OTHER_ERROR, e.getMessage()));
             }
-        } catch (Exception e) {
-            mListener.onFailure(new OkHttpException(CodeHelper.OTHER_ERROR, e.getMessage()));
-            e.printStackTrace();
+        }else{
+            mListener.onSuccess(code,responseObj);
         }
+
+//        try {
+//            /**
+//             * 协议确定后看这里如何修改
+//             */
+//            JSONObject result = new JSONObject(responseObj.toString());
+//            if (mClass == null) {
+//                mListener.onSuccess(result);
+//            } else {
+//                Object obj = new Gson().fromJson(responseObj.toString(), mClass);  //转化成实体对象
+//                if (obj != null) {
+//                    mListener.onSuccess(obj);
+//                } else {
+//                    mListener.onFailure(new OkHttpException(CodeHelper.JSON_ERROR, CodeHelper.EMPTY_MSG));
+//                }
+//            }
+//        } catch (Exception e) {
+//            mListener.onFailure(new OkHttpException(CodeHelper.OTHER_ERROR, e.getMessage()));
+//            e.printStackTrace();
+//        }
     }
 }
